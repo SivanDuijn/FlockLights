@@ -1,30 +1,29 @@
 import numpy as np
-from vector import Vector3D
-import boidUtils
+import boidUtils as bu
+import vectorUtils as vu
 
 class Boid:
 
   def __init__(self, pos):
     self.pos = pos
-    self.flockForceToApply = Vector3D.createNull()
-    self.vel = Vector3D.createRandom(3)
+    self.vel = np.random.random_sample(3) * 3
   
-  def copy(self):
+  def copyForOverflow(self):
     copy = Boid(self.pos.copy())
     copy.vel = self.vel.copy()
     return copy
 
   def update(self, maxSpeed, maxForce, secondsPast, boxSize):
-    self.flockForceToApply.limit(maxForce)
+    self.flockForceToApply = vu.limit(self.flockForceToApply, maxForce)
     # add force to current velocity
     self.vel += self.flockForceToApply * secondsPast
-    self.vel.limit(maxSpeed)
+    self.vel = vu.limit(self.vel, maxSpeed)
     # and add the velocity to current position
     self.pos += self.vel * secondsPast
     # correct if the boid went past an edge
-    self.pos.x = boidUtils.correctEdgeAxis(self.pos.x, 0, boxSize.x);
-    self.pos.y = boidUtils.correctEdgeAxis(self.pos.y, 0, boxSize.y);
-    self.pos.z = boidUtils.correctEdgeAxis(self.pos.z, 0, boxSize.z);
+    self.pos[0] = bu.correctEdgeAxis(self.pos[0], 0, boxSize[0])
+    self.pos[1] = bu.correctEdgeAxis(self.pos[1], 0, boxSize[1])
+    self.pos[2] = bu.correctEdgeAxis(self.pos[2], 0, boxSize[2])
 
   def calcFlockForce(self, boids, percR, maxSpeed, maxForce, sizeBox, serpMult):
     bsInView = self.calcBoidsInView(boids, percR, sizeBox)
@@ -42,12 +41,12 @@ class Boid:
     self.flockForceToApply = s + c + a
 
   def calcBoidsInView(self, boids, percR, sizeBox):
-    bs = np.array((), dtype=Boid)
-    for i in range(len(boids)):
-      boid = boidUtils.correctEdgeOverflowPerceptionR(self.pos, boids[i], sizeBox, percR)
-      if self is not boid and self.pos.dist(boid.pos) <= percR:
+    bs = []
+    for b in boids:
+      boid = bu.correctEdgeOverflowPerceptionR(self.pos, b, sizeBox, percR)
+      if self is not boid and vu.dist(self.pos, boid.pos) <= percR:
         # print(boids[i])
-        bs = np.append(bs, boid)
+        bs.append(boid)
         # print(bs[len(bs) - 1])
         # print("")
     
@@ -55,13 +54,13 @@ class Boid:
 
   def calcSeparation(self, bsInView, percR, maxForce):
     if len(bsInView) == 0:
-      return Vector3D.createNull()
+      return np.array((0, 0, 0), dtype=float)
 
-    sep = Vector3D.createNull()
-    for i in range(len(bsInView)):
-      pushForce = self.pos - bsInView[i].pos
-      l = pushForce.length()
-      pushForce.normalize()
+    sep = np.array((0, 0, 0), dtype=float)
+    for bInView in bsInView:
+      pushForce = self.pos - bInView.pos
+      l = vu.mag(pushForce)
+      pushForce = vu.normalize(pushForce)
       pushForce *= 1 - (l / percR)
       sep += pushForce
     
@@ -71,23 +70,23 @@ class Boid:
 
   def calcAlignment(self, bsInView, maxSpeed, maxForce):
     if len(bsInView) == 0:
-      return Vector3D.createNull()
+      return np.array((0, 0, 0), dtype=float)
 
-    averageHeading = self.vel.normalized()
-    for i in range(len(bsInView)):
-      if bsInView[i].vel.length() > 0:
-        averageHeading += bsInView[i].vel.normalized()
+    averageHeading = vu.normalize(self.vel)
+    for bInView in bsInView:
+      if vu.mag(bInView.vel) > 0:
+        averageHeading += vu.normalize(bInView.vel)
     
     averageHeading /= len(bsInView) + 1
     return self.steerForceFromVector(averageHeading, maxSpeed, maxForce)
 
   def calcCohesion(self, bsInView, maxSpeed, maxForce):
     if len(bsInView) == 0:
-      return Vector3D.createNull()
+      return np.array((0, 0, 0), dtype=float)
 
-    centerOfMass = self.pos.copy()
-    for i in range(len(bsInView)):
-      centerOfMass += bsInView[i].pos
+    centerOfMass = np.copy(self.pos)
+    for bInView in bsInView:
+      centerOfMass += bInView.pos
     
     centerOfMass /= len(bsInView) + 1
     return self.steerTowards(centerOfMass, maxSpeed, maxForce)
@@ -98,13 +97,13 @@ class Boid:
     self.flockForceToApply += seek
 
   def steerForceFromVector(self, desired, maxSpeed, maxForce):
-    desired.setMag(maxSpeed)
+    desired = vu.setMag(desired, maxSpeed)
     desired -= self.vel
     desired *= maxForce / maxSpeed
     return desired
   def steerTowards(self, dest, maxSpeed, maxForce):
-    if self.pos == dest:
-      return Vector3D.createNull() 
+    if np.array_equal(self.pos, dest):
+      return np.array((0, 0, 0), dtype=float)
     dest -= self.pos
     return self.steerForceFromVector(dest, maxSpeed, maxForce)
   

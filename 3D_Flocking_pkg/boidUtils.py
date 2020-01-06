@@ -1,4 +1,5 @@
-from vector import Vector3D
+import numpy as np
+import copy
 
 def correctEdgeAxis(axisValue, minn, maxx):
   if axisValue > maxx:
@@ -13,14 +14,14 @@ def correctEdgeOverflowPerceptionR(ourPos, otherBoid, sizeBox, percR):
   # because boids will get teleported to the other side of the sceen when they fly out of the screen
   # here we return a teleported copy, if a boid on the other side is in range
 
-  x = correctEdgeInfinityPerceptionOnAxis(ourPos.x, otherBoid.pos.x, sizeBox.x, percR)
-  y = correctEdgeInfinityPerceptionOnAxis(ourPos.y, otherBoid.pos.y, sizeBox.y, percR)
-  z = correctEdgeInfinityPerceptionOnAxis(ourPos.z, otherBoid.pos.z, sizeBox.z, percR)
-  pos = Vector3D(x, y, z)
-  if pos == ourPos:
+  x = correctEdgeInfinityPerceptionOnAxis(ourPos[0], otherBoid.pos[0], sizeBox[0], percR)
+  y = correctEdgeInfinityPerceptionOnAxis(ourPos[1], otherBoid.pos[1], sizeBox[1], percR)
+  z = correctEdgeInfinityPerceptionOnAxis(ourPos[2], otherBoid.pos[2], sizeBox[2], percR)
+  pos = np.array((x, y, z), dtype=float)
+  if np.array_equal(pos, ourPos):
     return otherBoid
   else:
-    b = otherBoid.copy()
+    b = copy.copy(otherBoid)
     b.pos = pos
     return b
 
