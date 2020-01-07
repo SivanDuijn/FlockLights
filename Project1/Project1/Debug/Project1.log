@@ -1,0 +1,7 @@
+﻿  main.cpp
+C:\Users\sivan\Desktop\Project1\Project1\utils.h(13,13): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\sivan\Desktop\Project1\Project1\graphics.h(314,42): error C2086: 'int right': redefinition
+C:\Users\sivan\Desktop\Project1\Project1\graphics.h(314): message : see declaration of 'right'
+C:\Users\sivan\Desktop\Project1\Project1\main.cpp(16,35): error C2664: 'void initgraph(int *,int *,char *)': cannot convert argument 3 from 'const char [10]' to 'char *'
+C:\Users\sivan\Desktop\Project1\Project1\main.cpp(16,22): message : Conversion from string literal loses const qualifier (see /Zc:strictStrings)
+C:\Users\sivan\Desktop\Project1\Project1\graphics.h(279,10): message : see declaration of 'initgraph'
