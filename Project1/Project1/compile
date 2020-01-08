@@ -1,8 +1,0 @@
-echo Compiling...
-g++ -c main.cpp
-
-if [ "$1" == "-r" ]
- then
-  g++ main.o -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system
-  ./sfml-app
-fi

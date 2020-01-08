@@ -60,6 +60,7 @@ public:
   Vector3 copy() {
     return Vector3(x, y, z);
   }
+	void makeTrivial() { x = y = z = 0; }
 
 	// function call operator
 	void operator ()(const float x0, const float y0, const float z0)
@@ -204,6 +205,12 @@ public:
 
 	void log() {
 		std::cout << "[ " << x << ", " << y << ", " << z << " ]" << std::endl;
+	}
+	std::string toStr() {
+		std::string r = "[" + std::to_string(x) + ", " 
+			+ std::to_string(y) + ", "
+			+ std::to_string(z) + "]";
+		return r; 
 	}
 };
 

@@ -1,6 +1,7 @@
 #include "Vector3.h"
 #include "Boid.h"
 #include "BoidUtils.h"
+#include "Utils.h"
 
 float BoidUtils::getRandomRangeWithBoxInMiddle(float m, float axis) {
 	float destMaxAxis = axis * m;
@@ -15,7 +16,7 @@ float BoidUtils::correctEdgeAxis(float axisValue, float minV, float maxV) {
 		axisValue = maxV;
 	return axisValue;
 }
-Boid& BoidUtils::correctEdgeOverflowPerceptionR(Vector3 &ourPos, Boid &otherBoid, Vector3 &sizeBox, float perceptionRadius) {
+Boid BoidUtils::correctEdgeOverflowPerceptionR(Vector3 &ourPos, Boid &otherBoid, Vector3 &sizeBox, float perceptionRadius) {
 	// if a boid is close to an edge, than a boid on the other side of the
 	// screen could still be inside the perception radius
 	// because boids will get teleported to the other side of the sceen when they fly out of the screen
@@ -44,6 +45,21 @@ float BoidUtils::correctEdgeInfinityPerceptionOnAxis(float thisAxis, float toChe
 			toCheckAxis += sizeBoxAxis;
 	}
 	return toCheckAxis;
+}
+
+Boid BoidUtils::createRandomBoid(Vector3 &sizeBox, float maxVel) {
+	return Boid(
+		Vector3(
+			Utils::randInt(sizeBox.x),
+			Utils::randInt(sizeBox.y),
+			Utils::randInt(sizeBox.z)
+		),
+		Vector3(
+			Utils::randfloat(maxVel),
+			Utils::randfloat(maxVel),
+			Utils::randfloat(maxVel)
+		)
+	);
 }
 
 
