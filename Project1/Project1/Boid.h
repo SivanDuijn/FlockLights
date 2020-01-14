@@ -20,6 +20,7 @@ public:
 		float maxSpeed,
 		float maxForce,
 		Vector3& sizeBox,
+		Vector3& dest,
 		float sepMultiplier
 	);
 

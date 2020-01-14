@@ -1,0 +1,1 @@
+g++ ws2812-rpi.cpp test.cpp -o test -fpermissive -Wwrite-strings -Woverflow

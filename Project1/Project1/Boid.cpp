@@ -1,4 +1,3 @@
-#include "Vector3.h"
 #include "BoidUtils.h"
 #include "Boid.h"
 #include <iostream>
@@ -18,6 +17,7 @@ void Boid::calcFlockForce(
 	float maxSpeed,
 	float maxForce,
 	Vector3 &sizeBox,
+	Vector3 &dest,
 	float sepMultiplier) {
 
 	Vector3 sep = Vector3(0, 0, 0);
@@ -66,6 +66,12 @@ void Boid::calcFlockForce(
 	//coh.log();
 	//std::cout << nBsInView << endl;
 	flockForceToApply = sep + coh + ali;
+
+	// add destination steer force
+	Vector3 d = dest.copy();
+	Vector3 seek = steerTowards(d, maxSpeed, maxForce);
+	seek *= .3;
+	flockForceToApply += seek;
 }
 
 void Boid::update(float maxSpeed, float maxForce, float timePast, Vector3 &boxSize) {
