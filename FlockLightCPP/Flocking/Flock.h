@@ -2,7 +2,7 @@
 #define FLOCK_H
 
 #include "Boid.h"
-#include "Vector3.h"
+#include "../Utils/Vector3.h"
 #include <chrono>
 
 #define FLOCK_MAX_WAIT_DEST_REACHED 10  // seconds

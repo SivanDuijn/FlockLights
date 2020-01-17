@@ -1,8 +1,8 @@
-#include "Flock.h"
-#include "Vector3.h"
+#include "../Flocking/Flock.h"
+#include "../Flocking/BoidUtils.h"
+#include "../Utils/Vector3.h"
+#include "../Utils/Utils.h"
 
-#include "Utils.h"
-#include "BoidUtils.h"
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <chrono>

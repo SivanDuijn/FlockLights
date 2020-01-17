@@ -1,7 +1,7 @@
-#include "Vector3.h"
 #include "Boid.h"
 #include "BoidUtils.h"
-#include "Utils.h"
+#include "../Utils/Vector3.h"
+#include "../Utils/Utils.h"
 
 float BoidUtils::getRandomRangeWithBoxInMiddle(float m, float axis) {
 	float destMaxAxis = axis * m;

@@ -1,6 +1,6 @@
 #include "Flock.h"
 #include "BoidUtils.h"
-#include "Utils.h"
+#include "../Utils/Utils.h"
 
 Flock::Flock(int n, Vector3 bs, float mSpeed, float mForce, float percRadius) {
     amount = n;

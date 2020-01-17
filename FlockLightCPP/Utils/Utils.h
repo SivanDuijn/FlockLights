@@ -1,7 +1,6 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include "Boid.h"
 #include "Vector3.h"
 #include "Utils.h"
 
