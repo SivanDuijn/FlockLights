@@ -12,18 +12,22 @@ Flock::Flock(int n, Vector3 bs, float mSpeed, float mForce, float percRadius) {
     boids = new Boid[amount];
 
     for (int i = 0; i < amount; i++)
-        boids[i] = BoidUtils::createRandomBoid(boxSize, 5);
+        boids[i] = Boid(
+            Vector3(
+                boxSize.x/2 + Utils::randFloat(3),
+                boxSize.y/2 + Utils::randFloat(3),
+                boxSize.z/2 + Utils::randFloat(3)
+            ), Utils::randVec(-1, 1));
     
     destination = Vector3(
 			Utils::randInt(boxSize.x),
 			Utils::randInt(boxSize.y),
 			Utils::randInt(boxSize.z)
 		);
-    // std::cout << "hi" << std::endl;
 }
 
 void Flock::calcFlockForces() {
-    for (int i = 0; i < amount; i++)
+    for (int i = 0; i < amount; i++) 
         boids[i].calcFlockForce(boids, amount, percR, maxSpeed, maxForce, boxSize, destination, sepMult);
 }
 
@@ -32,10 +36,11 @@ void Flock::updatePos(float secondsPassed) {
         boids[i].update(maxSpeed, maxForce, secondsPassed, boxSize);
         
         // check if the boids have reached the destination
-        if (!destReached && (boids[i].pos - destination).length() < 10) {
+        if (!destReached && (boids[i].pos - destination).length() < 50) {
             destReached = true;
             destReachedTimestamp = std::chrono::steady_clock::now();
             waitSeconds = Utils::randInt(FLOCK_MAX_WAIT_DEST_REACHED);
+            //destination = Utils::randVecInBox(boxSize);
         }
     }
 }
@@ -59,7 +64,7 @@ void Flock::updateSepMultiplier(float secondsPassed) {
         sepMultUnitIncreaseUnit < 0 && sepMult < sepMultTarget) 
     {
         sepMult = sepMultTarget;
-        sepMultTarget = 2 + Utils::randFloat(3);
+        sepMultTarget = .5 + Utils::randFloat(3);
         sepMultUnitIncreaseUnit = fabsf32(sepMultUnitIncreaseUnit); // set to positive
         if (sepMult > sepMultTarget)
             sepMultUnitIncreaseUnit *= -1; // set negative

@@ -23,7 +23,7 @@ class Flock {
     //float easingProgress = 0; // value from 0 to 1
     //float easingProgressIncreaseUnit = 0.01;
     float sepMult = 3;
-    float sepMultTarget = 5;
+    float sepMultTarget = 2;
     float sepMultUnitIncreaseUnit = .001;
     //float oldSepMult = 3;
     //float sepMultDiff = 2; // difference between target and current

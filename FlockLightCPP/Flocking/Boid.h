@@ -12,6 +12,7 @@ public:
 
 	Boid() { };
 	Boid(Vector3 p, Vector3 v);
+	void setPosAndVec(Vector3 p, Vector3 v);
 
 	void calcFlockForce(
 		Boid* boids,

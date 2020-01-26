@@ -3,6 +3,8 @@
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
 
+using namespace std;
+
 namespace Utils {
 
     void init() {
@@ -16,6 +18,14 @@ namespace Utils {
 	float randFloat(float max) {
 		return static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / max));
 	}
+	Vector3 randVec(float min, float max) {
+		float d = max - min;
+		return Vector3(
+			Utils::randFloat(d) + min,
+			Utils::randFloat(d) + min,
+			Utils::randFloat(d) + min
+		);
+	}
 	Vector3 randVecInBox(Vector3 box) {
 		return Vector3(
 			Utils::randInt(box.x),
@@ -23,7 +33,7 @@ namespace Utils {
 			Utils::randInt(box.z)
 		);
 	}
-
+	
 	float map(float v, float start1, float stop1, float start2, float stop2) {
 		return ((v-start1)/(stop1-start1))*(stop2-start2)+start2;
 	}

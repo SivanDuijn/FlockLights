@@ -61,5 +61,8 @@ Boid BoidUtils::createRandomBoid(Vector3 &sizeBox, float maxVel) {
 		)
 	);
 }
+Boid BoidUtils::createBoid(Vector3 p, Vector3 v) {
+	return Boid(Vector3(p.x, p.y, p.z), Vector3(v.x, v.y, p.z));
+}
 
 

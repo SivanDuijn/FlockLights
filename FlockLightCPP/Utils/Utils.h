@@ -3,6 +3,9 @@
 
 #include "Vector3.h"
 #include "Utils.h"
+#include <vector>
+
+using namespace std;
 
 namespace Utils {
 
@@ -11,6 +14,7 @@ namespace Utils {
 	// 0 - max, max including
 	int randInt(int max);
 	float randFloat(float max);
+	Vector3 randVec(float min, float max);
 	Vector3 randVecInBox(Vector3 box);
 
 	float easeIn(float n, float p = 3);

@@ -2,9 +2,18 @@
 #include "Boid.h"
 #include <iostream>
 
+#define ALI_MOD 	.2
+#define COH_MOD 	.4
+#define SEEK_MOD 	.3
+
 using namespace std;
 
 Boid::Boid(Vector3 p, Vector3 v)
+{
+	pos = p;
+	vel = v;
+}
+void Boid::setPosAndVec(Vector3 p, Vector3 v)
 {
 	pos = p;
 	vel = v;
@@ -59,8 +68,8 @@ void Boid::calcFlockForce(
 	coh = steerTowards(coh, maxSpeed, maxForce);
 
 	sep *= sepMultiplier;
-	ali *= .2;
-	coh *= .4;
+	ali *= ALI_MOD;
+	coh *= COH_MOD;
 	//sep.log();
 	//ali.log();
 	//coh.log();
@@ -70,7 +79,8 @@ void Boid::calcFlockForce(
 	// add destination steer force
 	Vector3 d = dest.copy();
 	Vector3 seek = steerTowards(d, maxSpeed, maxForce);
-	seek *= .3;
+	//float l = 1 - (pos - dest).length() / 900;
+	seek *= SEEK_MOD;
 	flockForceToApply += seek;
 }
 

@@ -12,6 +12,7 @@ public:
 	static Boid correctEdgeOverflowPerceptionR(Vector3 &ourPos, Boid& otherBoid, Vector3 &sizeBox, float perceptionRadius);
 
 	static Boid createRandomBoid(Vector3 &sizeBox, float maxVel);
+	static Boid createBoid(Vector3 p, Vector3 v);
 
 	static float correctEdgeInfinityPerceptionOnAxis(
 		float thisAxis,
