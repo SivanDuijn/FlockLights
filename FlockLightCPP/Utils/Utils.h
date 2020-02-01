@@ -2,8 +2,6 @@
 #define UTILS_H
 
 #include "Vector3.h"
-#include "Utils.h"
-#include <vector>
 
 using namespace std;
 

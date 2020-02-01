@@ -1,5 +1,4 @@
 #include "../Flocking/Flock.h"
-#include "../Flocking/BoidUtils.h"
 #include "../Utils/Vector3.h"
 #include "../Utils/Utils.h"
 #include "../Utils/LEDPosUtils.h"
@@ -17,7 +16,7 @@ using namespace std;
 #define MAX_FORCE .03 // 6
 #define PERC_RADIUS 100
 
-#define DEFAULT_FILENAME "ledspos.txt"
+#define DEFAULT_POSFILE_LOCATION "../ledspos.txt"
 
 int main(int argc, char *argv[]) 
 {
@@ -34,9 +33,9 @@ int main(int argc, char *argv[])
 	}
 
 	// LEDs positions
-	string filename = DEFAULT_FILENAME;
+	string filename = DEFAULT_POSFILE_LOCATION;
     if (argc < 2)
-        cout << "no filename given, using default " << DEFAULT_FILENAME << endl;
+        cout << "no filename given, using default \"" << DEFAULT_POSFILE_LOCATION << "\"" << endl;
     else
         filename = argv[1];
 	int AmountLeds;

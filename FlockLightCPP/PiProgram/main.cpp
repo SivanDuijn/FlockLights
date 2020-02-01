@@ -3,6 +3,7 @@
 #include "../Utils/Vector3.h"
 #include "../Utils/Utils.h"
 #include "../Utils/ws2812-rpi.h"
+#include "../Utils/LEDPosUtils.h"
 
 #include <iostream>
 #include <chrono>
@@ -16,7 +17,7 @@ using namespace std;
 #define MAX_FORCE .03 // 6
 #define PERC_RADIUS 100
 
-#define AMOUNT_LEDS 5
+#define DEFAULT_POSFILE_LOCATION "../ledspos.txt"
 
 Color_t setBrightness(Color_t c, float k) {
     uint8_t r = c.r*k;
@@ -32,7 +33,7 @@ Color_t setBrightness(Color_t c, float k) {
     return Color_t(r, g, b);
 }
 
-int main() 
+int main(int argc, char *argv[]) 
 {
 	Utils::init();
 
@@ -41,23 +42,20 @@ int main()
 	Vector3 boxSize = Vector3(900, 900, 900);
 	Flock flock = Flock(AMOUNT_BOIDS, boxSize, MAX_SPEED, MAX_FORCE, PERC_RADIUS);
 
-    // LEDS POSITIONS
-    Vector3 ledsPos[AMOUNT_LEDS] = {
-        Vector3(491,273,345),
-        Vector3(321,265,335),
-        Vector3(411,190,537),
-        Vector3(386,355,619),
-        Vector3(244,135,500)
-    };
-    Utils::putLEDPositionsInRelativeSpace(ledsPos, boxSize, AMOUNT_LEDS);
-    // for (int i=0; i<AMOUNT_LEDS; i++) {
-    //     ledsPos[i] = Utils::randVecInBox(boxSize);
-    // }
+    // LEDs positions
+	string filename = DEFAULT_POSFILE_LOCATION;
+    if (argc < 2)
+        cout << "no filename given, using default \"" << DEFAULT_POSFILE_LOCATION << "\"" << endl;
+    else
+        filename = argv[1];
+	int amountLeds;
+    Vector3* ledsPos = LEDPosUtils::readLedsPosFromFile(filename, &amountLeds);
+	LEDPosUtils::putLEDPositionsInRelativeSpace(ledsPos, boxSize, amountLeds);
     
     // LEDS
     Color_t color = Color_t(255, 90, 0);
-    NeoPixel *leds = new NeoPixel(AMOUNT_LEDS);
-    for (int i=0; i<AMOUNT_LEDS; i++)
+    NeoPixel *leds = new NeoPixel(amountLeds);
+    for (int i=0; i<amountLeds; i++)
         leds->setPixelColor(i, color);
     leds->show();
     usleep(100000);
@@ -77,7 +75,7 @@ int main()
 		flock.updateEverything(microsPassed / 10000.0);
 
         // calculate leds brightness
-        for (int i=0; i<AMOUNT_LEDS; i++) {
+        for (int i=0; i<amountLeds; i++) {
             int boidsInRange = 0;
             for (int j=0; j<AMOUNT_BOIDS; j++) {
                 if ((flock.boids[j].pos - ledsPos[i]).length() < 300)

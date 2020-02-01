@@ -1,3 +1,6 @@
+// #ifndef UTILS_H
+// #define UTILS_H
+
 #include "Utils.h"
 
 #include <stdlib.h>     /* srand, rand */
@@ -51,3 +54,5 @@ namespace Utils {
 		return easeOut((n - .5) * 1.587402 + .206299, 3);
 	}
 }
+
+// #endif
