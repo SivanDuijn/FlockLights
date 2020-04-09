@@ -9,19 +9,19 @@ while [ "$1" != "" ]; do
             echo Compiling external libraries to object files
             cd ..
             ./compileAllDep.sh
-            cd LonelyAnimation/
+            cd Animation/
         ;;
     esac
     shift
 done
 
 echo Compiling...
-g++ main.cpp ../Flocking/Flock.o ../Utils/Utils.cpp -o run.out -lsfml-graphics -lsfml-window -lsfml-system
+g++ main.cpp ../Flocking/Flock.o ../Utils/Utils.cpp -o animation.out -lsfml-graphics -lsfml-window -lsfml-system
 
 if [ $run = "true" ]
     then
         echo Running..
-        ./run.out
+        ./animation.out
 fi
 
 echo Done!

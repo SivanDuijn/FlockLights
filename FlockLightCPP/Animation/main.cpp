@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
 
 	int AmountLeds;
     Vector3* ledsPos = LEDPosUtils::readLedsPosFromFile(filename, &AmountLeds);
-	Vector3 boxSize = LEDPosUtils::putLEDPositionsInRelativeSpace(ledsPos, AmountLeds, MIN_AXIS_SIZE, EXTRA_SPACE_AXIS);
+	Vector3 boxSize = LEDPosUtils::putLEDPositionsInBox(ledsPos, AmountLeds, MIN_AXIS_SIZE, EXTRA_SPACE_AXIS);
 	cout << "virtual box: " << boxSize.toStr() << endl;
 
 	Flock flock = Flock(AMOUNT_BOIDS, boxSize, MAX_SPEED, MAX_FORCE, PERC_RADIUS, EXTRA_SPACE_AXIS - 50);
@@ -116,13 +116,13 @@ int main(int argc, char *argv[])
 			shape.setPosition(x, y);
 			
 
-            int boidsInRange = 0;
-            for (int j=0; j<AMOUNT_BOIDS; j++) {
-                if ((flock.boids[j].pos - ledsPos[i]).length() < 200)
-                    boidsInRange++;
-            }
-            // boidsInRange = std::max(boidsInRange, 100);
-            float b = boidsInRange / (float)AMOUNT_BOIDS;
+			int boidsInRange = 0;
+			for (int j=0; j<AMOUNT_BOIDS; j++) {
+				if ((flock.boids[j].pos - ledsPos[i]).length() < 200)
+					boidsInRange++;
+			}
+			// boidsInRange = std::max(boidsInRange, 100);
+			float b = boidsInRange / (float)AMOUNT_BOIDS;
 
 			shape.setFillColor(sf::Color(255, 255, 0, b * 255));	
 			window.draw(shape);	

@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
     // read LEDs positions from file and scale them so they fit in virtual space
 	int amountLeds;
     Vector3* ledsPos = LEDPosUtils::readLedsPosFromFile(filename, &amountLeds);
-	Vector3 boxSize = LEDPosUtils::putLEDPositionsInRelativeSpace(ledsPos, amountLeds, MIN_AXIS_SIZE, EXTRA_SPACE_AXIS);
+	Vector3 boxSize = LEDPosUtils::putLEDPositionsInBox(ledsPos, amountLeds, MIN_AXIS_SIZE, EXTRA_SPACE_AXIS);
     
     // Initiate LEDs
     Color_t color = DEFAULT_COLOR;
