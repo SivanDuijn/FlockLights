@@ -57,9 +57,9 @@ public:
 	// setting ctor
 	Vector3(const float x0, const float y0, const float z0): x(x0), y(y0), z(z0) {}
 
-  Vector3 copy() {
-    return Vector3(x, y, z);
-  }
+	Vector3 copy() {
+		return Vector3(x, y, z);
+	}
 	void makeTrivial() { x = y = z = 0; }
 
 	// function call operator
@@ -81,6 +81,10 @@ public:
 	// addition
 	Vector3 operator +(const Vector3 &v) const
 	{   return Vector3(x+v.x, y+v.y, z+v.z);	 }
+	Vector3 operator +(const float num) const 
+	{
+		return Vector3(x+num, y+num, z+num);
+	}
 
 	// subtraction
 	Vector3 operator -(const Vector3 &v) const

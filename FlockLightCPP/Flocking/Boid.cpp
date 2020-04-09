@@ -79,7 +79,6 @@ void Boid::calcFlockForce(
 	// add destination steer force
 	Vector3 d = dest.copy();
 	Vector3 seek = steerTowards(d, maxSpeed, maxForce);
-	//float l = 1 - (pos - dest).length() / 900;
 	seek *= SEEK_MOD;
 	flockForceToApply += seek;
 }

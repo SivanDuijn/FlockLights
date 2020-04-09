@@ -5,11 +5,11 @@ while [ "$1" != "" ]; do
         -r | --run )  
             run=true
         ;;
-        -ca | --compileAll )
+        -ca | --compileAll | -all )
             echo Compiling external libraries to object files
             cd ..
             ./compileAllDep.sh
-            cd Animation
+            cd Animation/
         ;;
     esac
     shift

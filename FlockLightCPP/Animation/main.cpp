@@ -17,32 +17,49 @@ using namespace std;
 #define PERC_RADIUS 100
 
 #define DEFAULT_POSFILE_LOCATION "../ledspos.txt"
+#define DEFAULT_PASSED_MICROSEC_DEVIDER 5000
+
+#define MIN_AXIS_SIZE 500
+#define EXTRA_SPACE_AXIS 200
+
+#define WINDOW_SIZE_MOD .7
 
 int main(int argc, char *argv[]) 
 {
-	Utils::init();
-	sf::RenderWindow window(sf::VideoMode(900, 900), "Flocking Debugggg");
-
 	// INITIATION
-	Vector3 boxSize = Vector3(900, 900, 900);
-	Flock flock = Flock(AMOUNT_BOIDS, boxSize, MAX_SPEED, MAX_FORCE, PERC_RADIUS);
+	Utils::init();
 
-	sf::Color colors[AMOUNT_BOIDS];
-	for (int i = 0; i < AMOUNT_BOIDS; i++) {
-		colors[i] = sf::Color(Utils::randInt(255), Utils::randInt(255), Utils::randInt(255));
+	sf::Color boidsColor = sf::Color::Green;
+
+	string filename = DEFAULT_POSFILE_LOCATION;
+	float passedMicrosDevider = DEFAULT_PASSED_MICROSEC_DEVIDER;
+	int c = 1;
+	while (argc > c) 
+	{
+		cout << "c: " << c << "   argc: " << argc << endl;
+		if (string(argv[c]) == "-f") {
+			filename = argv[++c];
+		}
+		else if (string(argv[c]) == "-c") {
+			int r = stoi(string(argv[++c]));
+			int g = stoi(string(argv[++c]));
+			int b = stoi(string(argv[++c]));
+			boidsColor = sf::Color(r, g, b);
+		}
+		else if (string(argv[c]) == "-s") {
+			passedMicrosDevider = stoi(string(argv[++c]));
+		}
+		c++;
 	}
 
-	// LEDs positions
-	string filename = DEFAULT_POSFILE_LOCATION;
-    if (argc < 2)
-        cout << "no filename given, using default \"" << DEFAULT_POSFILE_LOCATION << "\"" << endl;
-    else
-        filename = argv[1];
 	int AmountLeds;
     Vector3* ledsPos = LEDPosUtils::readLedsPosFromFile(filename, &AmountLeds);
-	LEDPosUtils::putLEDPositionsInRelativeSpace(ledsPos, boxSize, AmountLeds);
+	Vector3 boxSize = LEDPosUtils::putLEDPositionsInRelativeSpace(ledsPos, AmountLeds, MIN_AXIS_SIZE, EXTRA_SPACE_AXIS);
+	cout << "virtual box: " << boxSize.toStr() << endl;
 
+	Flock flock = Flock(AMOUNT_BOIDS, boxSize, MAX_SPEED, MAX_FORCE, PERC_RADIUS, EXTRA_SPACE_AXIS - 50);
 
+	sf::RenderWindow window(sf::VideoMode(boxSize.x * WINDOW_SIZE_MOD, boxSize.y * WINDOW_SIZE_MOD), "Flocking Debugggg");
 	int counter = 0;
 	sf::CircleShape shape;
 	sf::Font font;
@@ -50,7 +67,7 @@ int main(int argc, char *argv[])
 	sf::Text text_bot;
 	text_bot.setFont(font);
 	text_bot.setCharacterSize(20);
-	text_bot.move(0, boxSize.y - text_bot.getCharacterSize() - 4);
+	text_bot.move(0, boxSize.y*WINDOW_SIZE_MOD - text_bot.getCharacterSize() - 4);
 
 	sf::Text text_leds;
 	text_leds.setFont(font);
@@ -76,7 +93,7 @@ int main(int argc, char *argv[])
 		int microsPassed = chrono::duration_cast<std::chrono::microseconds>(current - timestamp).count();
 		timestamp = current;
 		// calc flock forces and update velocities and positions
-		flock.updateEverything(microsPassed / 5000.0);
+		flock.updateEverything(microsPassed / passedMicrosDevider);
 
 
 		// draw
@@ -85,23 +102,23 @@ int main(int argc, char *argv[])
 		for (int i = 0; i < AMOUNT_BOIDS; i++) {
 			int r = Utils::map(flock.boids[i].pos.z, 0, boxSize.z, 1, 10);
 			shape.setRadius(r);
-			shape.setFillColor(sf::Color::Green);	
-			shape.setPosition(flock.boids[i].pos.x - r, flock.boids[i].pos.y-r);
+			shape.setFillColor(boidsColor);	
+			shape.setPosition(flock.boids[i].pos.x*WINDOW_SIZE_MOD - r, flock.boids[i].pos.y*WINDOW_SIZE_MOD - r);
 			
 			window.draw(shape);	
 		}
 		// draw ledpositions
         for (int i=0; i<AmountLeds; i++) {
 			int r = Utils::map(ledsPos[i].z, 0, boxSize.z, 1, 20);
-			int x = ledsPos[i].x-r;
-			int y = ledsPos[i].y-r;
+			int x = ledsPos[i].x*WINDOW_SIZE_MOD-r;
+			int y = ledsPos[i].y*WINDOW_SIZE_MOD-r;
 			shape.setRadius(r);
 			shape.setPosition(x, y);
 			
 
             int boidsInRange = 0;
             for (int j=0; j<AMOUNT_BOIDS; j++) {
-                if ((flock.boids[j].pos - ledsPos[i]).length() < 300)
+                if ((flock.boids[j].pos - ledsPos[i]).length() < 200)
                     boidsInRange++;
             }
             // boidsInRange = std::max(boidsInRange, 100);
@@ -117,7 +134,7 @@ int main(int argc, char *argv[])
 		int r = Utils::map(flock.destination.z, 0, boxSize.z, 10, 30);
 		shape.setRadius(r);
 		shape.setFillColor(sf::Color::Red);
-		shape.setPosition(flock.destination.x - r, flock.destination.y - r);
+		shape.setPosition(flock.destination.x*WINDOW_SIZE_MOD - r, flock.destination.y*WINDOW_SIZE_MOD - r);
 		window.draw(shape);
 
 		window.display();

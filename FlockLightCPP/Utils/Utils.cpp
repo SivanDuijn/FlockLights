@@ -29,11 +29,11 @@ namespace Utils {
 			Utils::randFloat(d) + min
 		);
 	}
-	Vector3 randVecInBox(Vector3 box) {
+	Vector3 randVecInBox(Vector3 box, float extraSpaceOnSides) {
 		return Vector3(
-			Utils::randInt(box.x),
-			Utils::randInt(box.y),
-			Utils::randInt(box.z)
+			extraSpaceOnSides + Utils::randInt(box.x - 2 * extraSpaceOnSides),
+			extraSpaceOnSides + Utils::randInt(box.y - 2 * extraSpaceOnSides),
+			extraSpaceOnSides + Utils::randInt(box.z - 2 * extraSpaceOnSides)
 		);
 	}
 	

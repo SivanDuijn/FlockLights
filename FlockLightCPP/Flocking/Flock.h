@@ -5,13 +5,13 @@
 #include "../Utils/Vector3.h"
 #include <chrono>
 
-#define FLOCK_MAX_WAIT_DEST_REACHED 10  // seconds
+#define FLOCK_MAX_WAIT_DEST_REACHED 1  // seconds
 
 class Flock {
     public:
     Boid *boids;
     Vector3 boxSize, destination;
-    float maxSpeed, maxForce, percR;
+    float maxSpeed, maxForce, percR, extraSpaceOnSides;
     int amount;
 
     // variables for waiting random secs after reaching the destination
@@ -29,7 +29,7 @@ class Flock {
     //float sepMultDiff = 2; // difference between target and current
 
     Flock() { };
-    Flock(int amount, Vector3 boxSize, float maxSpeed, float maxForce, float percR);
+    Flock(int amount, Vector3 boxSize, float maxSpeed, float maxForce, float percR, float extraSpaceSides);
 
     void updatePos(float secondsPassed);
     void calcFlockForces();
