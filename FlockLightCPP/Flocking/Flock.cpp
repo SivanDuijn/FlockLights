@@ -33,7 +33,7 @@ void Flock::updatePos(float secondsPassed) {
         boids[i].update(maxSpeed, maxForce, secondsPassed, boxSize);
         
         // check if the boids have reached the destination
-        if (/*!destReached &&*/ (boids[i].pos - destination).length() < 5) {
+        if (/*!destReached &&*/ (boids[i].pos - destination).length() < 10) {
             //destReached = true;
             //destReachedTimestamp = std::chrono::steady_clock::now();
             //waitSeconds = Utils::randInt(FLOCK_MAX_WAIT_DEST_REACHED);

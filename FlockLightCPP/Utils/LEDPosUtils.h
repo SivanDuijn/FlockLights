@@ -68,7 +68,7 @@ namespace LEDPosUtils {
     }
 
 
-	Vector3 putLEDPositionsInBox(Vector3 *ledspos, int amountLEDS, int minAxisBoxSize, int extraSpaceOnSides) {
+	Vector3 putLEDPositionsInRelativeSpace(Vector3 *ledspos, int amountLEDS, int minAxisBoxSize, int extraSpaceOnSides) {
 		Vector3 minV = Vector3(1000000000, 1000000000, 1000000000);
 		Vector3 maxV = Vector3(0, 0, 0);
 

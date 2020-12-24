@@ -9,19 +9,19 @@ while [ "$1" != "" ]; do
             echo Compiling external libraries to object files
             cd ..
             ./compileAllDep.sh
-            cd Animation
+            cd LonelyDotPiProgram/
         ;;
     esac
     shift
 done
 
 echo Compiling...
-g++ main.cpp ../Flocking/Flock.o ../Utils/Utils.cpp -o animation.out -lsfml-graphics -lsfml-window -lsfml-system
+g++ main.cpp ../Utils/Utils.cpp ../Utils/ws2812-rpi.o -o run -fpermissive
 
 if [ $run = "true" ]
     then
         echo Running..
-        ./animation.out
+        ./run
 fi
 
 echo Done!
